@@ -4,47 +4,49 @@ import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import { CustomCard } from "./CustomCard";
 
-export const Display = ({ movieList, handleOnDelete }) => {
-  const [displayList, setDisplayList] = useState([]);
+export const Display = ({ movieList }) => {
+  const [filteredMovies, setFilteredMovies] = useState(movieList);
 
-  // runs only on initial time
-  // runs every time at the end of the component render
-  // runs selectively by passing some dependency vairable
+  const displayHappyMovies = () => {
+    const happyMovies = movieList.filter((movie) => movie.category === "happy");
+    setFilteredMovies(happyMovies);
+  }
+
+  const displayLazyMovies = () => {
+    const happyMovies = movieList.filter((movie) => movie.category === "lazy");
+    setFilteredMovies(happyMovies);
+  }
+
+  const displayAllMovies = () => {
+    setFilteredMovies(movieList);
+  }
 
   useEffect(() => {
-    setDisplayList(movieList);
+    setFilteredMovies(movieList);
   }, [movieList]);
-
-  const handleOnFilter = (str) => {
-    let tempArg =
-      str === "all" ? movieList : movieList.filter((item) => item.mode === str);
-
-    setDisplayList(tempArg);
-  };
 
   return (
     <div className="bg-black p-5 rounded shadow-lg mt-5">
       <div className="">
         <ButtonGroup aria-label="Basic example">
-          <Button onClick={() => handleOnFilter("all")} variant="primary">
+          <Button  variant="primary" onClick={displayAllMovies}>
             All
           </Button>
-          <Button onClick={() => handleOnFilter("happy")} variant="warning">
+          <Button variant="warning" onClick={displayHappyMovies}>
             Happy
           </Button>
-          <Button onClick={() => handleOnFilter("lazy")} variant="info">
+          <Button  variant="info" onClick={displayLazyMovies}>
             Lazy
           </Button>
         </ButtonGroup>
       </div>
-      <div className="py-3">{displayList.length} Movies found!</div>
       <hr />
 
       <Row>
         <Col className="d-flex gap-2 flex-wrap justify-content-around">
-          {displayList.map((item) => (
-            <CustomCard searchedMovie={item} func={handleOnDelete} />
-          ))}
+          {filteredMovies.map((movieItem) => 
+            <CustomCard key={movieItem.imdbID} searchedMovie={movieItem} />
+          )}
         </Col>
       </Row>
     </div>
