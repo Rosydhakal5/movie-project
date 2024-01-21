@@ -1,8 +1,15 @@
 import { Col, Container, Row } from "react-bootstrap";
 import "./App.css";
 import SearchForm from "./components/SearchForm";
+import { useState } from "react";
+import { Display } from "./components/Display";
 
 function App() {
+  const [movieList, setMovieList] = useState([]);
+
+  const addToMovie =(movie) => {
+    setMovieList([...movieList, movie]);
+  }
 
   return (
     <>
@@ -14,8 +21,9 @@ function App() {
           </Col>
         </Row>
         <hr />
-        <SearchForm  />
+        <SearchForm addToMovie={addToMovie} />
         {/* <Display movieList={movieList} handleOnDelete={handleOnDelete} /> */}
+        <Display movieList={movieList}/>
       </Container>
     </>
   );
